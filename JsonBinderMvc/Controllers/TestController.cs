@@ -23,5 +23,26 @@ namespace JsonBinderMvc.Controllers
             Console.WriteLine(b.c);
             return Ok();
         }
+        
+        [HttpPut("one")]
+        [JsonParameters]
+        public async Task<IActionResult> One(string a)
+        {
+            Console.WriteLine(a);
+            return Ok();
+        }
+
+        [HttpPost("three")]
+        public async Task<IActionResult> Three([FromBody] ModelA a)
+        {
+            Console.WriteLine(a.B);
+            return Ok();
+        }
+    }
+
+    public class ModelA
+    {
+        public string A { get; set; }
+        public string B { get; set; }
     }
 }

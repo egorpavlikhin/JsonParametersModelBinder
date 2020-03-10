@@ -5,9 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
 
 namespace JsonBinder
 {
@@ -17,58 +15,44 @@ namespace JsonBinder
         {
             if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
 
-            var actionDescriptor = bindingContext.ActionContext.ActionDescriptor as ControllerActionDescriptor;
-            if (actionDescriptor.MethodInfo.GetCustomAttributes(typeof(JsonParametersAttribute), false).Length > 0)
+            var context = bindingContext.HttpContext;
+            if (context.Request.ContentType != "application/json")
             {
-                var context = bindingContext.HttpContext;
-                if (context.Request.ContentType != "application/json")
-                {
-                    bindingContext.Result = ModelBindingResult.Failed();
-                    return;
-                }
+                bindingContext.Result = ModelBindingResult.Failed();
+                return;
+            }
 
 #if (NETSTANDARD2_1 || NETCOREAPP3_0)
-                context?.Request.EnableBuffering();
+            context?.Request.EnableBuffering();
 #else
             context?.Request.EnableRewind();
 #endif
 
-                using var reader = new StreamReader(context.Request.Body, Encoding.UTF8,
-                    false,
-                    1024,
-                    true); // so body can be re-read next time
+            using var reader = new StreamReader(context.Request.Body, Encoding.UTF8,
+                false,
+                1024,
+                true); // so body can be re-read next time
 
-                var body = await reader.ReadToEndAsync();
-                var json = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body);
-                if (json.TryGetValue(bindingContext.FieldName, out var value))
+            var body = await reader.ReadToEndAsync();
+            var json = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(body);
+            if (json.TryGetValue(bindingContext.FieldName, out var value))
+            {
+                if (bindingContext.ModelType == typeof(string))
                 {
-                    if (bindingContext.ModelType == typeof(string))
-                    {
-                        bindingContext.Result = ModelBindingResult.Success(value.GetString());
-                    }
-                    else if (bindingContext.ModelType == typeof(object))
-                    {
-                        var serializerOptions = new JsonSerializerOptions
-                        {
-                            Converters = {new DynamicJsonConverter()}
-                        };
-                        var val = JsonSerializer.Deserialize<dynamic>(value.ToString(), serializerOptions);
-                        bindingContext.Result = ModelBindingResult.Success(val);
-                    }
+                    bindingContext.Result = ModelBindingResult.Success(value.GetString());
                 }
-
-                context.Request.Body.Position = 0; // rewind
+                else if (bindingContext.ModelType == typeof(object))
+                {
+                    var serializerOptions = new JsonSerializerOptions
+                    {
+                        Converters = {new DynamicJsonConverter()}
+                    };
+                    var val = JsonSerializer.Deserialize<dynamic>(value.ToString(), serializerOptions);
+                    bindingContext.Result = ModelBindingResult.Success(val);
+                }
             }
-        }
-    }
 
-    public class JsonBinderProvider : IModelBinderProvider
-    {
-        public IModelBinder GetBinder(ModelBinderProviderContext context)
-        {
-            if (context == null) throw new ArgumentNullException(nameof(context));
-
-            return new BinderTypeModelBinder(typeof(JsonBinder));
+            context.Request.Body.Position = 0; // rewind
         }
     }
 }
