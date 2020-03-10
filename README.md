@@ -25,22 +25,7 @@ public async Task<IActionResult> TwoParameters(string a, dynamic b)
     return Ok();
 }
 ```
-
 **Step 2.**
-Add `JsonBinderProvider` to your `ModelBinderProviders`
-```C#
-public void ConfigureServices(IServiceCollection services)
-{
-    services.AddControllers();
-
-    services.AddControllers(options =>
-    {
-        options.ModelBinderProviders.Insert(0, new JsonBinderProvider());
-    });
-}
-```
-
-**Step 3.**
 Enhoy simplified workflow.
 
 ## Thanks
