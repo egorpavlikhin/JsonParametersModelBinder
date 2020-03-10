@@ -58,6 +58,38 @@ namespace JsonBinder
                 {
                     bindingContext.Result = ModelBindingResult.Success(value.GetBoolean());
                 }
+                else if (bindingContext.ModelType == typeof(decimal))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetDecimal());
+                }
+                else if (bindingContext.ModelType == typeof(byte))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetByte());
+                }
+                else if (bindingContext.ModelType == typeof(double))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetDouble());
+                }
+                else if (bindingContext.ModelType == typeof(Guid))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetGuid());
+                }
+                else if (bindingContext.ModelType == typeof(float))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetSingle());
+                }
+                else if (bindingContext.ModelType == typeof(DateTime))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetDateTime());
+                }
+                else if (bindingContext.ModelType == typeof(DateTimeOffset))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetDateTimeOffset());
+                }
+                else if (bindingContext.ModelType == typeof(sbyte))
+                {
+                    bindingContext.Result = ModelBindingResult.Success(value.GetSByte());
+                }
                 else if (bindingContext.ModelType.GetInterfaces()
                     .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
                 {
@@ -81,15 +113,15 @@ namespace JsonBinder
 
             context.Request.Body.Position = 0; // rewind
         }
-        
-        public static object ConvertList(IList<object> items, Type type, bool performConversion = false)
+
+        private static object ConvertList(IList<object?> items, Type type, bool performConversion = false)
         {
             var containedType = type.GenericTypeArguments.First();
-            var enumerableType = typeof(System.Linq.Enumerable);
-            var castMethod = enumerableType.GetMethod(nameof(System.Linq.Enumerable.Cast)).MakeGenericMethod(containedType);
-            var toListMethod = enumerableType.GetMethod(nameof(System.Linq.Enumerable.ToList)).MakeGenericMethod(containedType);
+            var enumerableType = typeof(Enumerable);
+            var castMethod = enumerableType.GetMethod(nameof(Enumerable.Cast)).MakeGenericMethod(containedType);
+            var toListMethod = enumerableType.GetMethod(nameof(Enumerable.ToList)).MakeGenericMethod(containedType);
 
-            IEnumerable<object> itemsToCast;
+            IEnumerable<object?> itemsToCast;
 
             if(performConversion)
             {
@@ -100,7 +132,7 @@ namespace JsonBinder
                 itemsToCast = items;
             }
 
-            var castedItems = castMethod.Invoke(null, new[] { itemsToCast });
+            var castedItems = castMethod.Invoke(null, new object[] { itemsToCast });
 
             return toListMethod.Invoke(null, new[] { castedItems });
         }
