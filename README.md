@@ -1,5 +1,13 @@
 # JsonParametersModelBinder
-Allows you to map JSON object directly to controller action parameters
+Allows you to map JSON object directly to controller action parameters.
+Convert JSON model 
+```
+{ "a": "a", "b": { "c": "value" } }
+``` 
+directly to action method
+```C#
+public ... Method(string a, dynamic b)
+```
 
 ## Warning ##
 Only string and dynamic types (with limitations) are supported for now.
