@@ -28,10 +28,10 @@ namespace JsonBinderMvc
         {
             services.AddControllers();
             
-            services.AddControllers(options =>
-            {
-                options.ModelBinderProviders.Insert(0, new JsonBinderProvider());
-            });
+            // services.AddControllers(options =>
+            // {
+            //     options.ModelBinderProviders.Insert(0, new JsonBinderProvider());
+            // });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
