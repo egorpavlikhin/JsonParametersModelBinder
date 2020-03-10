@@ -10,6 +10,7 @@
         <RepositoryUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder</RepositoryUrl>
         <AssemblyVersion>1.0.0</AssemblyVersion>
         <PackageLicenseUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageVersion>1.0.2</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>

@@ -11,7 +11,7 @@ public ... Method(string a, dynamic b)
 ```
 
 ## Warning ##
-Only string and dynamic types (with limitations) are supported for now.
+Nested objects are supported as dynamic types (with limitations).
 
 ## Usage
 **Step 1.**
