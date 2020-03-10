@@ -1,4 +1,4 @@
-[![NuGet](https://img.shields.io/nuget/v/JsonParametersModelBinder)](https://www.nuget.org/packages/JsonParametersModelBinder/1.0.0)
+[![NuGet](https://img.shields.io/nuget/v/JsonParametersModelBinder)](https://www.nuget.org/packages/JsonParametersModelBinder)
 # JsonParametersModelBinder
 Allows you to map JSON object directly to controller action parameters.
 Convert JSON model 
