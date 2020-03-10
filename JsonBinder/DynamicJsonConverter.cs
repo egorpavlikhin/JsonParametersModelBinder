@@ -46,7 +46,7 @@ namespace JsonBinder
             return document.RootElement.Clone();
         }
 
-        private object ReadObject(JsonElement jsonElement)
+        private static object ReadObject(JsonElement jsonElement)
         {
             IDictionary<string, object> expandoObject = new ExpandoObject();
             foreach (var obj in jsonElement.EnumerateObject())
@@ -59,7 +59,7 @@ namespace JsonBinder
             return expandoObject;
         }
 
-        private object? ReadValue(JsonElement jsonElement)
+        private static object? ReadValue(JsonElement jsonElement)
         {
             object? result = null;
             switch (jsonElement.ValueKind)
@@ -97,7 +97,7 @@ namespace JsonBinder
             return result;
         }
 
-        private object? ReadList(JsonElement jsonElement)
+        public static IList<object?> ReadList(JsonElement jsonElement)
         {
             IList<object?> list = new List<object?>();
             foreach (var item in jsonElement.EnumerateArray()) list.Add(ReadValue(item));
