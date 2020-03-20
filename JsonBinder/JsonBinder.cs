@@ -91,11 +91,16 @@ namespace JsonBinder
                 {
                     bindingContext.Result = ModelBindingResult.Success(value.GetSByte());
                 }
+                else if (bindingContext.ModelType.IsArray)
+                {
+                    bindingContext.Result = ModelBindingResult.Success(
+                        ConvertList(DynamicJsonConverter.ReadArray(value), bindingContext.ModelType, true));
+                }
                 else if (bindingContext.ModelType.GetInterfaces()
                     .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>)))
                 {
                     bindingContext.Result = ModelBindingResult.Success(
-                        ConvertList(DynamicJsonConverter.ReadList(value), bindingContext.ModelType, true));
+                        ConvertList(DynamicJsonConverter.ReadList(value), bindingContext.ModelType, false));
                 }
                 else if (bindingContext.ModelType == typeof(object))
                 {
@@ -115,23 +120,17 @@ namespace JsonBinder
             context.Request.Body.Position = 0; // rewind
         }
 
-        private static object ConvertList(IList<object?> items, Type type, bool performConversion = false)
+        private static object ConvertList(IList<object?> items, Type type, bool isArray)
         {
-            var containedType = type.GenericTypeArguments.First();
+            var containedType = isArray ? type.GetElementType() : type.GenericTypeArguments.First();
             var enumerableType = typeof(Enumerable);
             var castMethod = enumerableType.GetMethod(nameof(Enumerable.Cast)).MakeGenericMethod(containedType);
-            var toListMethod = enumerableType.GetMethod(nameof(Enumerable.ToList)).MakeGenericMethod(containedType);
+            var toListMethod = enumerableType.
+                GetMethod(isArray ? nameof(Enumerable.ToArray) : nameof(Enumerable.ToList)).MakeGenericMethod(containedType);
 
             IEnumerable<object?> itemsToCast;
 
-            if(performConversion)
-            {
-                itemsToCast = items.Select(item => Convert.ChangeType(item, containedType));
-            }
-            else 
-            {
-                itemsToCast = items;
-            }
+            itemsToCast = items.Select(item => Convert.ChangeType(item, containedType));
 
             var castedItems = castMethod.Invoke(null, new object[] { itemsToCast });
 
