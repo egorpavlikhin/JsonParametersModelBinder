@@ -54,6 +54,14 @@ namespace JsonBinderMvc.Controllers
             Console.WriteLine(a[0]);
             return Ok();
         }
+
+        [HttpPost("six")]
+        [JsonParameters]
+        public async Task<IActionResult> Six(string[] a)
+        {
+            Console.WriteLine(a[0]);
+            return Ok();
+        }
     }
 
     public class ModelA
