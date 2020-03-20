@@ -17,7 +17,7 @@ namespace JsonBinder
             if (bindingContext == null) throw new ArgumentNullException(nameof(bindingContext));
 
             var context = bindingContext.HttpContext;
-            if (context.Request.ContentType != "application/json"
+            if (!context.Request.ContentType.StartsWith("application/json")
                 || context == null)
             {
                 bindingContext.Result = ModelBindingResult.Failed();

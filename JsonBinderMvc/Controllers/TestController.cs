@@ -20,17 +20,18 @@ namespace JsonBinderMvc.Controllers
         [JsonParameters]
         public async Task<IActionResult> TwoParameters(string a, dynamic b)
         {
+            Console.WriteLine(a);
             Console.WriteLine(b.c);
             return Ok();
         }
-        
+
         [HttpPut("one")]
-                 [JsonParameters]
-                 public async Task<IActionResult> One(string a)
-                 {
-                     Console.WriteLine(a);
-                     return Ok();
-                 }
+        [JsonParameters]
+        public async Task<IActionResult> One(string a)
+        {
+            Console.WriteLine(a);
+            return Ok();
+        }
 
         [HttpPost("three")]
         public async Task<IActionResult> Three([FromBody] ModelA a)
@@ -38,7 +39,7 @@ namespace JsonBinderMvc.Controllers
             Console.WriteLine(a.B);
             return Ok();
         }
-        
+
         [HttpPost("four")]
         [JsonParameters]
         public async Task<IActionResult> Four(int a)
@@ -46,7 +47,7 @@ namespace JsonBinderMvc.Controllers
             Console.WriteLine(a);
             return Ok();
         }
-        
+
         [HttpPost("five")]
         [JsonParameters]
         public async Task<IActionResult> Five(List<int> a)
