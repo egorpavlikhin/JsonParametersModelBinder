@@ -105,6 +105,19 @@ namespace JsonBinder
             return list.Count == 0 ? null : list;
         }
 
+        public static object?[] ReadArray(JsonElement jsonElement)
+        {
+            object?[] array = new object?[jsonElement.GetArrayLength()];
+            int index = 0;
+            foreach (var item in jsonElement.EnumerateArray())
+            {
+                array[index] = ReadValue(item);
+                index++;
+            }
+
+            return array.Length == 0 ? null : array;
+        }
+
         public override void Write(Utf8JsonWriter writer,
             object value,
             JsonSerializerOptions options)
