@@ -3,6 +3,13 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <PackageId>JsonParametersModelBinder</PackageId>
+        <Authors>Egor Pavlikhin</Authors>
+        <PackageProjectUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder/blob/master/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder</RepositoryUrl>
+        <PackageVersion>1.0.1</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
