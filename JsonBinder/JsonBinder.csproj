@@ -5,11 +5,12 @@
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <PackageId>JsonParametersModelBinder</PackageId>
-        <Authors>Egor Pavlikhin</Authors>
+        <Title>JsonParametersModelBinder</Title>
         <PackageProjectUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder/blob/master/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder</RepositoryUrl>
-        <PackageVersion>1.0.1</PackageVersion>
+        <AssemblyVersion>1.0.0</AssemblyVersion>
+        <PackageLicenseUrl>https://github.com/egorpavlikhin/JsonParametersModelBinder/blob/master/LICENSE</PackageLicenseUrl>
+        <PackageVersion>1.0.2</PackageVersion>
     </PropertyGroup>
 
     <ItemGroup>
